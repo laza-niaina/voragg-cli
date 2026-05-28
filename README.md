@@ -23,7 +23,7 @@ Download anime episodes from streaming sites via the command line.
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/<username>/voragg-cli.git
+git clone https://github.com/laza-niaina/voragg-cli.git
 cd voragg-cli
 npm install
 ```
