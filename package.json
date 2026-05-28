@@ -1,0 +1,18 @@
+{
+  "name": "voragg-cli",
+  "version": "1.0.0",
+  "description": "Download anime episodes from streaming sites via CLI",
+  "type": "module",
+  "bin": {
+    "voragg": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "cheerio": "^1.0.0",
+    "cli-progress": "^3.12.0",
+    "commander": "^12.0.0"
+  }
+}
