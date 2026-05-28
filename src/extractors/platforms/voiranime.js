@@ -7,7 +7,7 @@ export class VoirAnimeEpisode extends BaseEpisode {
     const response = await axios.get(this.url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://voiranime.com/',
+        'Referer': 'https://voir-anime.to/',
       },
     });
 
@@ -71,7 +71,7 @@ export class VoirAnimePlatform extends Platform {
 
       if (href.startsWith(baseUrl) || href.startsWith(seriesUrl)) {
         // Normalize: ensure we store full URL
-        const fullUrl = href.startsWith('http') ? href : `https://voiranime.com${href.startsWith('/') ? '' : '/'}${href}`;
+        const fullUrl = href.startsWith('http') ? href : `https://voir-anime.to${href.startsWith('/') ? '' : '/'}${href}`;
 
         if (seenUrls.has(fullUrl)) return;
         seenUrls.add(fullUrl);

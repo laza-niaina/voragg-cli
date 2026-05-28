@@ -73,25 +73,25 @@ node src/index.js <url> [options]
 Download all episodes from a series (interactively choose start episode):
 
 ```
-voragg https://voiranime.com/anime/shingeki-no-kyojin/
+voragg https://voir-anime.to/anime/shingeki-no-kyojin/
 ```
 
 Download from episode 5 onwards to a specific folder:
 
 ```
-voragg https://voiranime.com/anime/shingeki-no-kyojin/ -s 5 -o ./downloads
+voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -s 5 -o ./downloads
 ```
 
 Download a single episode:
 
 ```
-voragg https://voiranime.com/anime/shingeki-no-kyojin/shingeki-no-kyojin-25/
+voragg https://voir-anime.to/anime/shingeki-no-kyojin/shingeki-no-kyojin-25/
 ```
 
 Download with 5 concurrent downloads:
 
 ```
-voragg https://voiranime.com/anime/shingeki-no-kyojin/ -p 5
+voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -p 5
 ```
 
 ## How it works
@@ -111,7 +111,7 @@ Series URL → Episode list → Player URL → Direct video URL → Download
 
 | Platform | Episodes | Players |
 | -------- | -------- | ------- |
-| [voiranime.com](https://voiranime.com) | ✅ | Streamtape, Vidmoly |
+| [voir-anime.to](https://voir-anime.to) | ✅ | Streamtape, Vidmoly |
 
 ## Requirements
 

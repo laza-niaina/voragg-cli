@@ -46,7 +46,7 @@ export class SmartDownloader {
   async _attemptDownload(url, filePath, epNum, overallBar, onProgress, abortSignal) {
     const reqHeaders = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': 'https://voiranime.com/',
+      'Referer': 'https://voir-anime.to/',
     };
 
     // HEAD request to get remote file info
@@ -90,7 +90,7 @@ export class SmartDownloader {
   async _downloadStream(url, filePath, epNum, startFrom, writeMode, streamLength, overallBar, onProgress, abortSignal) {
     const headers = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': 'https://voiranime.com/',
+      'Referer': 'https://voir-anime.to/',
     };
 
     const downloadOptions = {
