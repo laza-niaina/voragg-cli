@@ -1,12 +1,13 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { Platform, BaseEpisode } from '../../core/base.js';
+import { getRandomUA } from '../../userAgent.js';
 
 export class VoirAnimeEpisode extends BaseEpisode {
   async getPlayerUrl() {
     const response = await axios.get(this.url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': getRandomUA(),
         'Referer': 'https://voir-anime.to/',
       },
     });
@@ -56,7 +57,7 @@ export class VoirAnimePlatform extends Platform {
 
     const response = await axios.get(baseUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': getRandomUA(),
       },
     });
 

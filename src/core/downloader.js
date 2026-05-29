@@ -4,6 +4,7 @@ import path from 'node:path';
 import axios from 'axios';
 import { MAX_RETRIES, RETRY_DELAY_MS, DOWNLOAD_CHUNK_SIZE } from './config.js';
 import { sanitizeFilename, formatBytes, formatSpeed } from '../utils.js';
+import { getRandomUA } from '../userAgent.js';
 
 export class SmartDownloader {
   constructor(outputDir) {
@@ -44,7 +45,7 @@ export class SmartDownloader {
 
   async _attemptDownload(url, filePath, epNum, multibar, overallBar, onProgress, abortSignal) {
     const reqHeaders = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'User-Agent': getRandomUA(),
       'Referer': 'https://voir-anime.to/',
     };
 
@@ -88,7 +89,7 @@ export class SmartDownloader {
 
   async _downloadStream(url, filePath, epNum, startFrom, writeMode, streamLength, multibar, overallBar, onProgress, abortSignal) {
     const headers = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'User-Agent': getRandomUA(),
       'Referer': 'https://voir-anime.to/',
     };
 

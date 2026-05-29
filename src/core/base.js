@@ -1,6 +1,5 @@
 /**
- * Abstract base classes following the Python ABC pattern.
- * In JS these are documented interfaces that throw if unimplemented methods are called.
+ * Abstract base classes — documented interfaces that throw if unimplemented methods are called.
  */
 
 export class VideoPlayer {
