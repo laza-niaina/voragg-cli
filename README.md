@@ -89,7 +89,7 @@ voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -s 5 -o ./downloads
 Download a single episode:
 
 ```
-voragg https://voir-anime.to/anime/shingeki-no-kyojin/shingeki-no-kyojin-25/
+voragg https://voir-anime.to/anime/shingeki-no-kyojin/shingeki-no-kyojin-attaque-des-titans-25-vostfr/
 ```
 
 Download with 5 concurrent downloads:
