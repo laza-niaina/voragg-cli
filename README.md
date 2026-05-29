@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="preview.gif" alt="voragg-cli preview" width="720">
+</div>
+
 # voragg-cli
 
 Download anime episodes from streaming sites via the command line.
