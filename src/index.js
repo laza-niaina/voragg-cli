@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-import { AnimeDL } from './cli.js';
+import { AnimeDL, printBanner } from './cli.js';
 
 async function main() {
+  printBanner();
   const app = new AnimeDL();
   try {
     await app.run(process.argv);

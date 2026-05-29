@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 import axios from 'axios';
-import cliProgress from 'cli-progress';
 import { MAX_RETRIES, RETRY_DELAY_MS, DOWNLOAD_CHUNK_SIZE } from './config.js';
 import { sanitizeFilename, formatBytes, formatSpeed } from '../utils.js';
 
@@ -11,7 +10,7 @@ export class SmartDownloader {
     this.outputDir = outputDir;
   }
 
-  async download(url, epNum, overallBar, title, onProgress, abortSignal) {
+  async download(url, epNum, multibar, overallBar, title, onProgress, abortSignal) {
     const dir = path.resolve(this.outputDir);
     await fsp.mkdir(dir, { recursive: true });
 
@@ -26,7 +25,7 @@ export class SmartDownloader {
     let retries = 0;
     while (retries <= MAX_RETRIES) {
       try {
-        return await this._attemptDownload(url, filePath, epNum, overallBar, onProgress, abortSignal);
+        return await this._attemptDownload(url, filePath, epNum, multibar, overallBar, onProgress, abortSignal);
       } catch (err) {
         // Don't retry if cancelled
         if (err.name === 'CanceledError' || err.message === 'Cancelled') {
@@ -43,7 +42,7 @@ export class SmartDownloader {
     }
   }
 
-  async _attemptDownload(url, filePath, epNum, overallBar, onProgress, abortSignal) {
+  async _attemptDownload(url, filePath, epNum, multibar, overallBar, onProgress, abortSignal) {
     const reqHeaders = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       'Referer': 'https://voir-anime.to/',
@@ -55,7 +54,7 @@ export class SmartDownloader {
       headResponse = await axios.head(url, { timeout: 30000, headers: reqHeaders });
     } catch (err) {
       // Some CDNs reject HEAD — skip resume/skip logic, download fresh
-      return this._downloadStream(url, filePath, epNum, 0, 'w', 0, overallBar, onProgress, abortSignal);
+      return this._downloadStream(url, filePath, epNum, 0, 'w', 0, multibar, overallBar, onProgress, abortSignal);
     }
 
     const remoteSize = parseInt(headResponse.headers['content-length'] || '0', 10);
@@ -84,10 +83,10 @@ export class SmartDownloader {
     }
 
     const streamLength = remoteSize - startFrom;
-    return this._downloadStream(url, filePath, epNum, startFrom, writeMode, streamLength, overallBar, onProgress, abortSignal);
+    return this._downloadStream(url, filePath, epNum, startFrom, writeMode, streamLength, multibar, overallBar, onProgress, abortSignal);
   }
 
-  async _downloadStream(url, filePath, epNum, startFrom, writeMode, streamLength, overallBar, onProgress, abortSignal) {
+  async _downloadStream(url, filePath, epNum, startFrom, writeMode, streamLength, multibar, overallBar, onProgress, abortSignal) {
     const headers = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       'Referer': 'https://voir-anime.to/',
@@ -129,20 +128,17 @@ export class SmartDownloader {
       let lastBytes = downloaded;
 
       let fileBar = null;
-      if (overallBar && actualTotal > 0) {
-        fileBar = new cliProgress.SingleBar({
-          format: `  ep${String(epNum).padStart(2, '0')} [{bar}] {percentage}% | {valFmt}/{totalFmt} | {speed}`,
-          barCompleteChar: '█',
-          barIncompleteChar: '░',
-          hideCursor: false,
-          clearOnComplete: false,
-          stopOnComplete: true,
-        }, cliProgress.Presets.shades_classic);
-
-        fileBar.start(actualTotal, startFrom, {
+      if (multibar && actualTotal > 0) {
+        fileBar = multibar.create(actualTotal, startFrom, {
           speed: '0 B/s',
           valFmt: formatBytes(startFrom),
           totalFmt: formatBytes(actualTotal),
+        }, {
+          format: `  ep${String(epNum).padStart(2, '0')} [{bar}] {percentage}% | {valFmt}/{totalFmt} | {speed}`,
+          barCompleteChar: '█',
+          barIncompleteChar: '░',
+          clearOnComplete: false,
+          stopOnComplete: true,
         });
       }
 

@@ -28,7 +28,7 @@ export class Orchestrator {
     return episodes;
   }
 
-  async downloadEpisode(episode, overallBar, onProgress) {
+  async downloadEpisode(episode, multibar, overallBar, onProgress) {
     if (this._abortSignal?.aborted) return { skipped: false, error: 'Cancelled' };
     const epLabel = `Episode ${episode.number}`;
 
@@ -84,7 +84,7 @@ export class Orchestrator {
     const wrappedProgress = onProgress
       ? (p) => onProgress({ phase: 'downloading', ...p })
       : undefined;
-    const result = await downloader.download(directUrl, episode.number, overallBar, episode.title, wrappedProgress, this._abortSignal);
+    const result = await downloader.download(directUrl, episode.number, multibar, overallBar, episode.title, wrappedProgress, this._abortSignal);
 
     if (result.skipped) {
       this.logger.warning(`${epLabel} already exists.`);
@@ -121,7 +121,7 @@ export class Orchestrator {
       while (queue.length > 0) {
         const ep = queue.shift();
         try {
-          const result = await orchestrator.downloadEpisode(ep, overallBar);
+          const result = await orchestrator.downloadEpisode(ep, multibar, overallBar);
           if (result.error) {
             errors.push({ episode: ep.number, error: result.error });
           }

@@ -1,12 +1,24 @@
 import { Command } from 'commander';
-import * as readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
+import * as readline from 'node:readline/promises';
+import { DEFAULT_MAX_CONCURRENT, DEFAULT_OUTPUT, DEFAULT_PLAYER } from './core/config.js';
 import { Orchestrator } from './core/orchestrator.js';
 import { VoirAnimeEpisode } from './extractors/platforms/voiranime.js';
 import { SmartDownloader } from './core/downloader.js';
-import { extractEpisodeNumber } from './utils.js';
-import { Logger } from './utils.js';
-import { DEFAULT_MAX_CONCURRENT, DEFAULT_OUTPUT, DEFAULT_PLAYER } from './core/config.js';
+import { extractEpisodeNumber, Logger } from './utils.js';
+
+const BANNER = `
+██╗   ██╗ ██████╗ ██████╗  █████╗  ██████╗  ██████╗
+██║   ██║██╔═══██╗██╔══██╗██╔══██╗██╔════╝ ██╔════╝
+██║   ██║██║   ██║██████╔╝███████║██║  ███╗██║  ███╗
+╚██╗ ██╔╝██║   ██║██╔══██╗██╔══██║██║   ██║██║   ██║
+ ╚████╔╝ ╚██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝
+  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝
+`;
+
+export function printBanner() {
+  console.log(BANNER);
+}
 
 export class AnimeDL {
   constructor() {
@@ -17,19 +29,28 @@ export class AnimeDL {
     const program = new Command();
 
     program
-      .name('anime-dl')
+      .name('voragg')
       .description('Download anime episodes from streaming sites')
-      .argument('<url>', 'URL to the anime page or episode')
+      .argument('[url]', 'URL to the anime page or episode (optional — shows help if omitted)')
       .option('-o, --output <dir>', 'Output directory', DEFAULT_OUTPUT)
       .option('-s, --start <number>', 'Starting episode number', parseInt)
       .option('-p, --process <number>', 'Max concurrent downloads', parseInt, DEFAULT_MAX_CONCURRENT)
       .option('--player <name>', 'Video player to use', DEFAULT_PLAYER)
       .option('-q, --quality <label>', 'Video quality (e.g. 720, 1080)')
       .option('--debug', 'Enable debug logging', false)
+      .addHelpText('beforeAll', 'Anime download CLI — voragg\n')
+      .addHelpText('after', '\nExamples:\n  voragg https://voir-anime.to/anime/shingeki-no-kyojin/\n  voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -s 5 -o ./downloads\n  voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -p 5')
       .parse(argv);
 
+    const url = program.args[0];
+
+    if (!url) {
+      console.log();
+      program.help();
+    }
+
     return {
-      url: program.args[0],
+      url,
       output: program.opts().output,
       start: program.opts().start,
       process: program.opts().process,
@@ -109,7 +130,7 @@ export class AnimeDL {
       logger: this.logger,
     });
 
-    const result = await orchestrator.downloadEpisode(episode, null);
+    const result = await orchestrator.downloadEpisode(episode, null, null);
     if (result.error) {
       this.logger.error(`Failed: ${result.error}`);
       process.exit(1);
