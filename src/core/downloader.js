@@ -5,6 +5,7 @@ import axios from 'axios';
 import { MAX_RETRIES, RETRY_DELAY_MS, DOWNLOAD_CHUNK_SIZE } from './config.js';
 import { sanitizeFilename, formatBytes, formatSpeed } from '../utils.js';
 import { getRandomUA } from '../userAgent.js';
+import { isHlsUrl, downloadHls } from './hlsDownloader.js';
 
 export class SmartDownloader {
   constructor(outputDir) {
@@ -15,9 +16,10 @@ export class SmartDownloader {
     const dir = path.resolve(this.outputDir);
     await fsp.mkdir(dir, { recursive: true });
 
+    const ext = isHlsUrl(url) ? '.ts' : '.mp4';
     const filename = title
-      ? `${sanitizeFilename(title)}.mp4`
-      : `ep${String(epNum).padStart(2, '0')}.mp4`;
+      ? `${sanitizeFilename(title)}${ext}`
+      : `ep${String(epNum).padStart(2, '0')}${ext}`;
     const filePath = path.join(dir, filename);
 
     // If already aborted, bail immediately
@@ -44,6 +46,13 @@ export class SmartDownloader {
   }
 
   async _attemptDownload(url, filePath, epNum, multibar, overallBar, onProgress, abortSignal) {
+    // HLS streams: download segments and concatenate
+    if (isHlsUrl(url)) {
+      await downloadHls(url, filePath, epNum, onProgress);
+      if (overallBar) overallBar.increment();
+      return { path: filePath, skipped: false };
+    }
+
     const reqHeaders = {
       'User-Agent': getRandomUA(),
       'Referer': 'https://voir-anime.to/',
