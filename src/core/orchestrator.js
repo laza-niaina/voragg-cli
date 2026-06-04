@@ -22,9 +22,7 @@ export class Orchestrator {
   }
 
   async getSeriesEpisodes(seriesUrl) {
-    this.logger.info('Fetching episode list...');
     const episodes = await this.platform.getEpisodes(seriesUrl);
-    this.logger.info(`Found ${episodes.length} episodes (${episodes[0]?.number || '?'} - ${episodes[episodes.length - 1]?.number || '?'})`);
     return episodes;
   }
 

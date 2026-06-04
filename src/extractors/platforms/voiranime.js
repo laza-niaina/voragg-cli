@@ -4,7 +4,7 @@ import { Platform, BaseEpisode } from '../../core/base.js';
 import { getRandomUA } from '../../userAgent.js';
 
 export class VoirAnimeEpisode extends BaseEpisode {
-  async getPlayerUrl() {
+  async _resolvePlayerUrl() {
     const response = await axios.get(this.url, {
       headers: {
         'User-Agent': getRandomUA(),

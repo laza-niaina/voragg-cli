@@ -92,11 +92,14 @@ export class AnimeDL {
       logger: this.logger,
     });
 
+    this.logger.info('Fetching episode list...');
     const episodes = await orchestrator.getSeriesEpisodes(args.url);
 
     if (episodes.length === 0) {
       throw new Error('No episodes found');
     }
+
+    this.logger.info(`Found ${episodes.length} episode(s)`);
 
     const first = episodes[0].number;
     const last = episodes[episodes.length - 1].number;
@@ -120,14 +123,21 @@ export class AnimeDL {
   }
 
   async _handleSingleEpisode(args) {
-    const epNum = extractEpisodeNumber(args.url);
-    this.logger.info(`Single episode detected: Episode ${epNum}`);
-
     const episode = new VoirAnimeEpisode({
-      number: epNum,
-      name: `Episode ${epNum}`,
+      number: extractEpisodeNumber(args.url) || 1,
+      name: '',
       url: args.url,
     });
+
+    // Fetch page to get the title before showing anything
+    try {
+      await episode.getPlayerUrl();
+    } catch {
+      // title stays empty, fallback used later
+    }
+
+    const label = episode.title || `Episode ${episode.number}`;
+    this.logger.info(`Downloading: ${label}`);
 
     const orchestrator = new Orchestrator({
       outputDir: args.output,

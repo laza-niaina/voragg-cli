@@ -15,11 +15,18 @@ export class VideoPlayer {
 export class BaseEpisode {
   constructor({ number, name, url }) {
     this.number = number;
-    this.name = name;
+    this.name = name || '';
     this.url = url;
+    this._playerUrl = null;
   }
 
   async getPlayerUrl() {
+    if (this._playerUrl !== null) return this._playerUrl;
+    this._playerUrl = await this._resolvePlayerUrl();
+    return this._playerUrl;
+  }
+
+  async _resolvePlayerUrl() {
     throw new Error('Subclass must implement getPlayerUrl()');
   }
 }
