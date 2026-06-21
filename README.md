@@ -9,7 +9,7 @@ Download anime episodes from streaming sites via the command line.
 ## Features
 
 - **Episode discovery** — Scrapes series pages to find all episode URLs
-- **Player extraction** — Extracts video URLs from supported players (Streamtape, Vidmoly)
+- **Player extraction** — Extracts video URLs from supported players (Streamtape, Vidmoly, myTV)
 - **Resumable downloads** — Partial files continue where they left off
 - **Smart skipping** — Already-completed files are detected and skipped
 - **Retry logic** — Up to 3 retries on failure
@@ -67,7 +67,7 @@ node src/index.js <url> [options]
 | `-o, --output <dir>`      | `.`         | Output directory for downloaded files |
 | `-s, --start <number>`    | prompt      | Starting episode number |
 | `-p, --process <number>`  | `3`         | Max concurrent downloads |
-| `--player <name>`         | `streamtape` | Video player to use (`streamtape`, `vidmoly`) |
+| `--player <name>`         | `streamtape` | Video player to use (`streamtape`, `vidmoly`, `mytv`) |
 | `-q, --quality <label>`   | best        | Video quality (e.g. `480`, `720`, `1080`) |
 | `--debug`                 | off         | Enable debug logging |
 | `-h, --help`              |             | Show help |
@@ -98,6 +98,12 @@ Download with 5 concurrent downloads:
 voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -p 5
 ```
 
+Download with the myTV player at 1080p quality:
+
+```
+voragg https://voir-anime.to/anime/shingeki-no-kyojin/ --player mytv -q 1080
+```
+
 ## How it works
 
 1. **Episode discovery** — Scrapes the series page to find all episode URLs
@@ -115,7 +121,7 @@ Series URL → Episode list → Player URL → Direct video URL → Download
 
 | Platform | Episodes | Players |
 | -------- | -------- | ------- |
-| [voir-anime.to](https://voir-anime.to) | ✅ | Streamtape, Vidmoly |
+| [voir-anime.to](https://voir-anime.to) | ✅ | Streamtape, Vidmoly, myTV |
 
 ## Requirements
 

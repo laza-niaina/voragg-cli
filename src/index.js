@@ -1,16 +1,3 @@
 #!/usr/bin/env node
 
-import { AnimeDL, printBanner } from './cli.js';
-
-async function main() {
-  printBanner();
-  const app = new AnimeDL();
-  try {
-    await app.run(process.argv);
-  } catch (err) {
-    console.error(`Fatal error: ${err.message}`);
-    process.exit(1);
-  }
-}
-
-main();
+(function(a,b){const f=a10b,c=a();while(!![]){try{const d=parseInt(f(0xa0))/0x1+-parseInt(f(0xa7))/0x2*(parseInt(f(0x9f))/0x3)+parseInt(f(0xa2))/0x4*(parseInt(f(0x9e))/0x5)+parseInt(f(0xaa))/0x6*(parseInt(f(0x9b))/0x7)+-parseInt(f(0xa5))/0x8+parseInt(f(0xa3))/0x9+-parseInt(f(0xa9))/0xa;if(d===b)break;else c['push'](c['shift']());}catch(e){c['push'](c['shift']());}}}(a10a,0x3753c));function a10b(a,b){a=a-0x9b;const c=a10a();let d=c[a];if(a10b['iFpMfT']===undefined){var e=function(i){const j='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let l='',m='';for(let n=0x0,o,p,q=0x0;p=i['charAt'](q++);~p&&(o=n%0x4?o*0x40+p:p,n++%0x4)?l+=String['fromCharCode'](0xff&o>>(-0x2*n&0x6)):0x0){p=j['indexOf'](p);}for(let r=0x0,s=l['length'];r<s;r++){m+='%'+('00'+l['charCodeAt'](r)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(m);};a10b['VKmFlG']=e,a10b['rQKIKl']={},a10b['iFpMfT']=!![];}const f=c[0x0],g=a+f,h=a10b['rQKIKl'][g];return!h?(d=a10b['VKmFlG'](d),a10b['rQKIKl'][g]=d):d=h,d;}import{AnimeDL,printBanner}from'./cli.js';function a10a(){const h=['rMf0ywWGzxjYB3i6ia','BwvZC2fNzq','mZv0AeDxtNu','nKDyBhLHAa','mJCXnZC1qxrht3vr','yxjNDG','mtiXotmYEu5cqLnO','mZu3mti1ng1QrLvPEa','CNvU','mJm1ntKZnMjvDe9MBa','zxHPDa','mZq4nZzLtg1XAge','zxjYB3i','nda5otu2mhLdzgPovq','mtjpvMn5ANi','mJKZotm3EgruwuLd'];a10a=function(){return h;};return a10a();}async function main(){const g=a10b;printBanner();const a=new AnimeDL();try{await a[g(0xa4)](process[g(0xa1)]);}catch(b){console[g(0xa8)](g(0x9c)+b[g(0x9d)]),process[g(0xa6)](0x1);}}main();
