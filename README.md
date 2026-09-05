@@ -8,13 +8,17 @@ Download anime episodes from streaming sites via the command line.
 
 ## Features
 
-- **Episode discovery** — Scrapes series pages to find all episode URLs
-- **Player extraction** — Extracts video URLs from supported players (Streamtape, Vidmoly, myTV)
-- **Resumable downloads** — Partial files continue where they left off
-- **Smart skipping** — Already-completed files are detected and skipped
-- **Retry logic** — Up to 3 retries on failure
-- **Concurrent downloads** — Configurable parallel downloads
-- **Progress bars** — Per-file and overall download progress
+- **Anime-Sama support** - Downloads episodes from anime-sama.to series
+- **Voir-anime support** - Downloads episodes from voir-anime.to series
+- **15 supported players** - myTV, Vidmoly, Streamtape, Ansembed, Sibnet, oneupload, Sendvid, voe, filemoon, luluvdo, vidzy, uqload, embed4me, minochinos, movearnpre
+- **HLS downloads** - Downloads `.m3u8` streams segment by segment
+- **Direct downloads** - Downloads direct video files (e.g. MP4)
+- **Quality selection** - `auto` picks the lowest available quality; `manual` prompts you per episode
+- **Resumable downloads** - Partial files continue where they left off
+- **Smart skipping** - Already-completed files are detected and skipped
+- **Retry logic** - Up to 3 retries on failure
+- **Concurrent downloads** - Configurable parallel downloads
+- **Progress bars** - Per-file and overall download progress
 
 ## Getting started
 
@@ -51,8 +55,13 @@ voragg <url> [options]
 
 ```
 voragg <url> [options]
-node src/index.js <url> [options]
+voragg sama <anime-sama-url> [options]
+voragg voiranime <voir-anime-url> [options]
 ```
+
+The `sama` and `voiranime` subcommands force the URL to be handled by the
+matching platform and reject URLs from the other platform. The plain
+`voragg <url>` command auto-detects the platform from the URL host.
 
 ### Arguments
 
@@ -62,66 +71,49 @@ node src/index.js <url> [options]
 
 ### Options
 
-| Option                    | Default     | Description |
-| ------------------------- | ----------- | ----------- |
-| `-o, --output <dir>`      | `.`         | Output directory for downloaded files |
-| `-s, --start <number>`    | prompt      | Starting episode number |
-| `-p, --process <number>`  | `3`         | Max concurrent downloads |
-| `--player <name>`         | `streamtape` | Video player to use (`streamtape`, `vidmoly`, `mytv`) |
-| `-q, --quality <label>`   | best        | Video quality (e.g. `480`, `720`, `1080`) |
-| `--debug`                 | off         | Enable debug logging |
-| `-h, --help`              |             | Show help |
+| Option                  | Default  | Description |
+| ----------------------- | -------- | ----------- |
+| `-o, --output <dir>`    | `.`      | Output directory for downloaded files |
+| `-s, --start <number>`  | prompt   | Starting episode number |
+| `-t, --thread <number>` | `3`      | Max concurrent downloads |
+| `-p, --player <name>`   | `mytv`   | Video player to use |
+| `-q, --quality <label>` | `auto`   | Video quality (e.g. `480`, `720`, `1080`) |
+| `-m, --mode <mode>`     | `manual` | Quality selection: `auto` (lowest) or `manual` (prompt) |
+| `--debug`               | off      | Enable debug logging |
+| `-h, --help`            |          | Show help |
 
 ### Examples
 
-Download all episodes from a series (interactively choose start episode):
+Download all episodes from an Anime-Sama series:
 
 ```
-voragg https://voir-anime.to/anime/shingeki-no-kyojin/
+voragg sama https://anime-sama.to/catalogue/bleach/saison2/vf/ -p ansembed -q 480 -m auto -o ./downloads
 ```
 
-Download from episode 5 onwards to a specific folder:
+Download episodes from a Voir-anime series with the myTV player:
 
 ```
-voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -s 5 -o ./downloads
+voragg voiranime https://voir-anime.to/anime/shingeki-no-kyojin/ -p mytv -q 1080 -t 5
 ```
 
-Download a single episode:
+Download a single episode using auto-detection:
 
 ```
 voragg https://voir-anime.to/anime/shingeki-no-kyojin/shingeki-no-kyojin-attaque-des-titans-25-vostfr/
 ```
 
-Download with 5 concurrent downloads:
+Download a series with the Sibnet player:
 
 ```
-voragg https://voir-anime.to/anime/shingeki-no-kyojin/ -p 5
-```
-
-Download with the myTV player at 1080p quality:
-
-```
-voragg https://voir-anime.to/anime/shingeki-no-kyojin/ --player mytv -q 1080
-```
-
-## How it works
-
-1. **Episode discovery** — Scrapes the series page to find all episode URLs
-2. **Player extraction** — Visits each episode page to locate the video iframe (e.g., Streamtape)
-3. **Direct URL resolution** — Extracts the direct video file URL from the player page
-4. **Download** — Downloads each episode with resumable downloads, skip detection, retry logic, progress bars, and concurrent downloads
-
-### Pipeline
-
-```
-Series URL → Episode list → Player URL → Direct video URL → Download
+voragg sama https://anime-sama.to/catalogue/bleach/saison2/vf/ -p sibnet -m auto
 ```
 
 ## Supported platforms
 
-| Platform | Episodes | Players |
-| -------- | -------- | ------- |
-| [voir-anime.to](https://voir-anime.to) | ✅ | Streamtape, Vidmoly, myTV |
+| Platform | Players |
+| -------- | ------- |
+| [anime-sama.to](https://anime-sama.to) | Ansembed, Sibnet, oneupload, Sendvid, voe, filemoon, luluvdo, vidzy, uqload, embed4me, minochinos, movearnpre, myTV, Vidmoly, direct MP4 |
+| [voir-anime.to](https://voir-anime.to) | Streamtape, myTV, Vidmoly |
 
 ## Requirements
 
@@ -129,4 +121,4 @@ Series URL → Episode list → Player URL → Direct video URL → Download
 
 ## License
 
-MIT — see the [LICENSE](LICENSE) file for details.
+MIT - see the [LICENSE](LICENSE) file for details.
